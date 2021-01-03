@@ -1,0 +1,37 @@
+<idea-plugin>
+    <id>com.steve.plugin.client.cosmos</id>
+    <name>CosmosClientPlugin</name>
+    <version>1.0</version>
+    <vendor email="2226069315@qq.com" url="https://github.com/stevenzearo">Steve Zou</vendor>
+
+    <description>This is a Client for connect to Azure CosmosDB</description>
+
+    <change-notes>Init release of the cosmosDB client plugin.</change-notes>
+
+    <!-- please see https://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/build_number_ranges.html for description -->
+    <idea-version since-build="173.0"/>
+
+    <!-- please see https://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/plugin_compatibility.html
+         on how to target different product.plugins -->
+    <depends>com.intellij.modules.platform</depends>
+    <depends>com.intellij.java</depends>
+
+    <extensions defaultExtensionNs="com.intellij">
+        <!-- Add your extensions here -->
+    </extensions>
+
+    <actions>
+        <!-- Add your actions here -->
+        <group id="Demo.DemoAction" text="Hello World" description="Demo action">
+            <add-to-group group-id="MainMenu" anchor="last"/>
+            <action id="demo-action-0001" class="action.DemoAction" text="Hello World" description="A demo action"/>
+        </group>
+        <group id="action.Cosmos" text="Cosmos" description="Cosmos client">
+            <add-to-group group-id="MainMenu" anchor="last"/>
+            <action id="action.MongoClientAction" class="action.MongoClientAction" text="Mongo" description="Mongo client for cosmos"/>
+            <action id="action.SQLClientAction" class="action.SQLClientAction" text="SQL" description="SQL client for cosmos"/>
+        </group>
+    </actions>
+
+
+</idea-plugin>
