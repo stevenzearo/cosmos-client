@@ -1,5 +1,8 @@
 package ui;
 
+import client.sql.Cosmos;
+import client.sql.CosmosSQLConfig;
+import client.sql.CosmosSQLConfigBuilder;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.DialogBuilder;
 import com.intellij.openapi.ui.DialogPanel;
@@ -11,17 +14,13 @@ import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.List;
 
 /**
  * @author steve
  */
 public class SQLSettingDialog extends DialogBuilder {
     private int clickedTimes = 0;
-
-    private String host = "";
-    private String key = "";
-    private String database = "";
-    private String container = "";
 
     public SQLSettingDialog(
         Project project) {
@@ -45,25 +44,37 @@ public class SQLSettingDialog extends DialogBuilder {
 
         this.setOkOperation(() -> {
             String hostText = hostTextField.getText();
-            host = hostText == null || hostText.isBlank() ? null : hostText;
+            String host = hostText == null || hostText.isBlank() ? null : hostText;
 
             String keyText = keyTextField.getText();
-            key = keyText == null || keyText.isBlank() ? null : keyText;
+            String key = keyText == null || keyText.isBlank() ? null : keyText;
 
             String databaseText = databaseTextField.getText();
-            database = databaseText == null || databaseText.isBlank() ? null : databaseText;
+            String database = databaseText == null || databaseText.isBlank() ? null : databaseText;
 
             String containerText = containerTextField.getText();
-            container = containerText == null || containerText.isBlank() ? null : databaseText;
+            String container = containerText == null || containerText.isBlank() ? null : databaseText;
+            if (host == null || key == null) {
+                Messages.showMessageDialog("host or key must not be null", "Connection Info", Messages.getInformationIcon());
+            } else {
+                try {
+                    CosmosSQLConfig cosmosSQLConfig = new CosmosSQLConfigBuilder(host, key).setDataBase(database).setContainer(container).build();
+                    Cosmos cosmos = new Cosmos(cosmosSQLConfig);
+                    List<String> strings = cosmos.query("SELECT * FROM family");
+                    Messages.showMessageDialog("get %d records".formatted(strings.size()), "Query Info", Messages.getInformationIcon());
+                    cosmos.close();
+                } catch (Exception e) {
+                    Messages.showMessageDialog("get cosmos connection failed", "Error Info", Messages.getErrorIcon());
+                }
 
-            Messages.showMessageDialog("host: %s\nkey: %s\ndatabase: %s\ncontainer: %s".formatted(host, key, database, container), "Input Result", Messages.getInformationIcon());
+            }
 
             clickedTimes++;
             // todo get connection result, register connection service
 
 //            Messages.showMessageDialog("You've Triggered Ok Action %d times!".formatted(clickedTimes), "What's Up!", Messages.getInformationIcon());
-            SQLDialog sqlDialog = new SQLDialog(project);
-            sqlDialog.show();
+//            SQLDialog sqlDialog = new SQLDialog(project);
+//            sqlDialog.show();
         });
     }
 

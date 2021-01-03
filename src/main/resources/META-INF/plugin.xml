@@ -13,19 +13,20 @@
 
     <!-- please see https://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/plugin_compatibility.html
          on how to target different product.plugins -->
-    <depends>com.intellij.modules.platform</depends>
-    <depends>com.intellij.java</depends>
+<!--    <depends>com.intellij.modules.platform</depends>-->
 
+<!--
     <extensions defaultExtensionNs="com.intellij">
-        <!-- Add your extensions here -->
+        &lt;!&ndash; Add your extensions here &ndash;&gt;
     </extensions>
+-->
 
     <actions>
         <!-- Add your actions here -->
-        <group id="Demo.DemoAction" text="Hello World" description="Demo action">
+        <!--<group id="Demo.DemoAction" text="Hello World" description="Demo action">
             <add-to-group group-id="MainMenu" anchor="last"/>
             <action id="demo-action-0001" class="action.DemoAction" text="Hello World" description="A demo action"/>
-        </group>
+        </group>-->
         <group id="action.Cosmos" text="Cosmos" description="Cosmos client">
             <add-to-group group-id="MainMenu" anchor="last"/>
             <action id="action.MongoClientAction" class="action.MongoClientAction" text="Mongo" description="Mongo client for cosmos"/>

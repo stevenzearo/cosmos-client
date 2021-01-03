@@ -4,10 +4,12 @@ import com.azure.cosmos.ConsistencyLevel;
 import com.azure.cosmos.CosmosClient;
 import com.azure.cosmos.CosmosClientBuilder;
 import com.azure.cosmos.models.CosmosQueryRequestOptions;
-import com.azure.cosmos.util.CosmosPagedIterable;
+import com.azure.cosmos.models.PartitionKey;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * @author steve
@@ -27,15 +29,17 @@ public class Cosmos {
             .buildClient();
     }
 
-    public <T> List<T> query(String sql, Class<T> tClass) {
+    public List<String> query(String sql) {
         CosmosQueryRequestOptions queryOptions = new CosmosQueryRequestOptions();
         queryOptions.setQueryMetricsEnabled(true);
 
-        CosmosPagedIterable<T> queryItems = cosmosClient.getDatabase(cosmosSQLConfig.database)
+        return
+        cosmosClient.getDatabase(cosmosSQLConfig.database)
             .getContainer(cosmosSQLConfig.container)
-            .queryItems(sql, queryOptions, tClass);
-        ArrayList<T> results = new ArrayList<>();
-        queryItems.handle(stringFeedResponse -> results.addAll(stringFeedResponse.getResults()));
-        return results;
+            .queryItems("SELECT f.id FROM family f", queryOptions, String.class).streamByPage().flatMap(tFeedResponse -> tFeedResponse.getResults().stream()).collect(Collectors.toList());
+    }
+
+    public void close() {
+        cosmosClient.close();
     }
 }
