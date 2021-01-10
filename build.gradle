@@ -38,6 +38,7 @@ dependencies {
     compile("org.jetbrains.kotlin:kotlin-reflect")
     compile "org.jetbrains.kotlin:kotlin-script-runtime:$kotlinVersion"
     testCompile "junit:junit:$junitVersion"
+    testCompile group: 'org.jetbrains.kotlin', name: 'kotlin-test-junit', version: '1.4.21'
 }
 
 sourceCompatibility = JavaVersion.VERSION_1_8
@@ -53,9 +54,10 @@ compileKotlin {
 compileTestKotlin {
     kotlinOptions.jvmTarget = "1.8"
 }
+test {
+    useJUnit()
+}
 patchPluginXml {
-//    dependsOn("com.intellij.modules.platform")
-//    dependsOn("com.intellij.java")
     changeNotes """
       Add change notes here.<br>
       <em>most HTML tags may be used</em>"""

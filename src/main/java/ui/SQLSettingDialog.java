@@ -22,8 +22,7 @@ import java.util.List;
 public class SQLSettingDialog extends DialogBuilder {
     private int clickedTimes = 0;
 
-    public SQLSettingDialog(
-        Project project) {
+    public SQLSettingDialog(Project project) {
         super(project);
         this.setTitle("Cosmos SQL Client");
         this.resizable(false);
@@ -57,14 +56,16 @@ public class SQLSettingDialog extends DialogBuilder {
             if (host == null || key == null) {
                 Messages.showMessageDialog("host or key must not be null", "Connection Info", Messages.getInformationIcon());
             } else {
+                Cosmos cosmos = null;
                 try {
                     CosmosSQLConfig cosmosSQLConfig = new CosmosSQLConfigBuilder(host, key).setDataBase(database).setContainer(container).build();
-                    Cosmos cosmos = new Cosmos(cosmosSQLConfig);
-                    List<String> strings = cosmos.query("SELECT * FROM family");
+                    cosmos = new Cosmos(cosmosSQLConfig);
+                    List<String> strings = cosmos.query("SELECT f.id FROM family f");
                     Messages.showMessageDialog("get %d records".formatted(strings.size()), "Query Info", Messages.getInformationIcon());
-                    cosmos.close();
                 } catch (Exception e) {
                     Messages.showMessageDialog("get cosmos connection failed", "Error Info", Messages.getErrorIcon());
+                } finally {
+                    if (cosmos != null) cosmos.close();
                 }
 
             }

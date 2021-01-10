@@ -32,6 +32,11 @@
             <action id="action.MongoClientAction" class="action.MongoClientAction" text="Mongo" description="Mongo client for cosmos"/>
             <action id="action.SQLClientAction" class="action.SQLClientAction" text="SQL" description="SQL client for cosmos"/>
         </group>
+
+        <group id="action.KCosmos" text="KCosmos" description="Cosmos client">
+            <add-to-group group-id="MainMenu" anchor="last"/>
+            <action id="action.KSQLClientAction" class="action.KSQLClientAction" text="SQL" description="SQL client for cosmos"/>
+        </group>
     </actions>
 
 
